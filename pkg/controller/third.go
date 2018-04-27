@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"ppcontroller/pkg/task"
 	"k8s.io/api/core/v1"
+	"net/http"
+	"io/ioutil"
 )
 
 func (pts *PODController) printMsg(item interface{}) error {
@@ -20,4 +22,19 @@ func (pts *PODController) printMsg(item interface{}) error {
 		}
 	}
 	return nil
+}
+
+func (pts *PODController) httpGet()  {
+	resp, err := http.Get("http://www.baidu.com")
+	if err != nil {
+		fmt.Printf("We get the err: %v\n", err)
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Printf("We get the err: %v\n", err)
+	}
+
+	fmt.Println(string(body))
 }
