@@ -5,7 +5,7 @@ import (
 	"time"
 	"fmt"
 	"k8s.io/apimachinery/pkg/util/runtime"
-	"podtoservice/pkg/task"
+	"ppcontroller/pkg/task"
 	"k8s.io/api/core/v1"
 	"github.com/golang/glog"
 )
@@ -36,7 +36,7 @@ func NewPodController(conf *Configuration) *podController {
 	return pts
 }
 
-func (pts *podController) Run(workers int, stpChan <- chan struct{})  {
+func (pts *podController) Start()  {
 	defer runtime.HandleCrash()
 	glog.Info("Starting podToService controlelr Manager...")
 	pts.podController.Run(pts.stopChan)

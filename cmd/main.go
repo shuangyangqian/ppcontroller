@@ -3,7 +3,7 @@ package main
 import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
-	"podtoservice/pkg/controller"
+	"ppcontroller/pkg/controller"
 	"github.com/golang/glog"
 )
 
@@ -16,9 +16,8 @@ func main() {
 	clientset := getKubeClientset(conf.KubeConfigFile)
 	conf.Client = clientset
 
-	controller := controller.NewPodController(conf)
-	var stopCh <-chan struct{}
-	controller.Run(2, stopCh)
+	con := controller.NewPodController(conf)
+	con.Start()
 
 }
 
