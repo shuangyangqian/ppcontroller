@@ -3,14 +3,12 @@ package controller
 import (
 	"k8s.io/client-go/kubernetes"
 	"time"
-	"fmt"
 	"k8s.io/apimachinery/pkg/util/runtime"
-	"podtoservice/pkg/task"
-	"k8s.io/api/core/v1"
+	"ppcontroller/pkg/task"
 	"github.com/golang/glog"
 )
 
-type podController struct {
+type PODController struct {
 
 	kubeClient kubernetes.Clientset
 
@@ -23,8 +21,8 @@ type podController struct {
 
 }
 
-func NewPodController(conf *Configuration) *podController {
-	pts := &podController{
+func NewPodController(conf *Configuration) *PODController {
+	pts := &PODController{
 		kubeClient: conf.Client,
 		stopChan:make(chan struct{}),
 	}
@@ -36,7 +34,7 @@ func NewPodController(conf *Configuration) *podController {
 	return pts
 }
 
-func (pts *podController) Run(workers int, stpChan <- chan struct{})  {
+func (pts *PODController) Start()  {
 	defer runtime.HandleCrash()
 	glog.Info("Starting podToService controlelr Manager...")
 	pts.podController.Run(pts.stopChan)
@@ -52,23 +50,6 @@ func (pts *podController) Run(workers int, stpChan <- chan struct{})  {
 	}
 
 }
-
-func (pts *podController) printMsg(item interface{}) error {
-	if pts.syncQueue.IsShuttingDown() {
-		return nil
-	}
-
-	if element, ok := item.(task.Element); ok {
-		if name, ok := element.Key.(string); ok {
-			if obj, exists, _ := pts.podListener.pod.GetByKey(name); exists {
-				pod := obj.(*v1.Pod)
-				fmt.Printf("we get the change of POD:%v\n", pod)
-			}
-		}
-	}
-	return nil
-}
-
 
 type Configuration struct {
 	KubeConfigFile string

@@ -25,7 +25,7 @@ func (c *cacheController) Run(stopCh chan struct{}) {
 	}
 }
 
-func (pc *podController) createListers(stopChan chan struct{}) (*cacheLister, *cacheController) {
+func (pc *PODController) createListers(stopChan chan struct{}) (*cacheLister, *cacheController) {
 	podEventHander := cache.ResourceEventHandlerFuncs{
 		AddFunc: func(obj interface{}) {
 			fmt.Println("some obj:%v has been added to the cluster", obj)
